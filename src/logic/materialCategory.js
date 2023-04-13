@@ -1,8 +1,8 @@
 const { logger } = require("../common/log");
 
-const getMaterialFood = async (request, response, pool) => {
+const getMaterialCategory = async (request, response, pool) => {
   try {
-    const result = await pool.query("SELECT * FROM MaterialFood");
+    const result = await pool.query("SELECT * FROM MaterialCategory");
     return response.status(200).json({
       data: result.rows,
       token: request.token,
@@ -13,13 +13,12 @@ const getMaterialFood = async (request, response, pool) => {
     return;
   }
 };
-
-const insertMaterialFood = async (request, response, pool) => {
+const insertMaterialCategory = async (request, response, pool) => {
   try {
-    const { material_id, food_id } = request.body;
+    const { name, created_date } = request.body;
     await pool.query(
-      "INSERT INTO MaterialFood (material_id, food_id) values ($1, $2)",
-      [material_id, food_id]
+      "INSERT INTO MaterialCategory (name, created_date) values ($1, $2)",
+      [name, created_date]
     );
     return response.status(200).json({
       message: "success",
@@ -31,13 +30,13 @@ const insertMaterialFood = async (request, response, pool) => {
     return;
   }
 };
-
-const updateMaterialFood = async (request, response, pool) => {
+const updateMaterialCategory = async (request, response, pool) => {
   try {
-    const { material_id, food_id } = request.body;
-    await pool.query("UPDATE MaterialFood SET material_id=$1, food_id=$2", [
-      material_id,
-      food_id,
+    const { name, created_date, id } = request.body;
+    await pool.query("UPDATE Material SET name=$1, created_date=$2, id=$3", [
+      name,
+      created_date,
+      id,
     ]);
     return response.status(200).json({
       message: "success",
@@ -49,13 +48,13 @@ const updateMaterialFood = async (request, response, pool) => {
     return;
   }
 };
-
-const deleteMaterialFood = async (request, response, pool) => {
+const deleteMaterialCategory = async (request, response, pool) => {
   try {
-    const { material_id, food_id } = request.body;
-    await pool.query("DELETE FROM MaterialFood material_id=$1, food_id=$2", [
-      material_id,
-      food_id,
+    const { name, created_date, id } = request.body;
+    await pool.query("DELETE Material name=$1, created_date=$2, id=$3", [
+      name,
+      created_date,
+      id,
     ]);
     return response.status(200).json({
       message: "success",
@@ -69,8 +68,8 @@ const deleteMaterialFood = async (request, response, pool) => {
 };
 
 module.exports = {
-  getMaterialFood,
-  insertMaterialFood,
-  deleteMaterialFood,
-  updateMaterialFood,
+  getMaterialCategory,
+  insertMaterialCategory,
+  updateMaterialCategory,
+  deleteMaterialCategory,
 };
