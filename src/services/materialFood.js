@@ -4,7 +4,6 @@ const { logger } = require("../common/log");
 // postgresql сонгосон бол доорх мөрийн uncomment
 const {
   getMaterialFood,
-  insertMaterialFood,
   deleteMaterialFood,
   updateMaterialFood,
   insertMaterialFood,
