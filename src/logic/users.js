@@ -35,7 +35,7 @@ const updateUsers = async (request, response, pool) => {
     const { firstname, lastname, phone, password, created_date, id } =
       request.body;
     await pool.query(
-      "UPDATE Users SET firstname=$1, lastname=$2, phone=$3, password=$4, created_date=$5, where id=$6",
+      "UPDATE Users SET firstname=$1, lastname=$2, phone=$3, password=$4, created_date=$5, WHERE id=$6",
       [firstname, lastname, phone, password, created_date, id]
     );
     return response.status(200).json({
@@ -52,7 +52,7 @@ const deleteUsers = async (request, response, pool) => {
   try {
     const { user_id, food_id, comment } = request.body;
     await pool.query(
-      "DELETE Users firstname=$1, lastname=$2, phone=$3, password=$4, created_date=$5, where id=$6",
+      "DELETE Users firstname=$1, lastname=$2, phone=$3, password=$4, created_date=$5, WHERE id=$6",
       [firstname, lastname, phone, password, created_date, id]
     );
     return response.status(200).json({

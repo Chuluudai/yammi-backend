@@ -36,7 +36,7 @@ const updateFood = async (request, response, pool) => {
   try {
     const { title, img, how_to_cook, duration, category_id, id } = request.body;
     await pool.query(
-      "UPDATE Food SET title=$1, img=$2, how_to_cook=$3, duration=$4, category_id=$5 where id = $6",
+      "UPDATE Food SET title=$1, img=$2, how_to_cook=$3, duration=$4, category_id=$5 WHERE id = $6",
       [title, img, how_to_cook, duration, category_id, id]
     );
     return response.status(200).json({

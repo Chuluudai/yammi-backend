@@ -59,7 +59,7 @@ const updateUser = async (request, response, pool) => {
   try {
     const { username, firstname, lastname, password, id } = request.body;
     await pool.query(
-      "UPDATE users SET username=$1, firstname=$2, lastname=$3, password=$4 where id = $5",
+      "UPDATE users SET username=$1, firstname=$2, lastname=$3, password=$4 WHERE id = $5",
       [username, firstname, lastname, password, id]
     );
     return response.status(200).json({
