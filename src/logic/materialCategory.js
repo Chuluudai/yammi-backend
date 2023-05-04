@@ -15,11 +15,11 @@ const getMaterialCategory = async (request, response, pool) => {
 };
 const insertMaterialCategory = async (request, response, pool) => {
   try {
-    const { name, created_date } = request.body;
-    await pool.query(
-      "INSERT INTO MaterialCategory (name, created_date) values ($1, $2)",
-      [name, created_date]
-    );
+    const { name } = request.body;
+    await pool.query("INSERT INTO MaterialCategory (name) values ($1, $2)", [
+      name,
+      created_date,
+    ]);
     return response.status(200).json({
       message: "success",
       token: request.token,
