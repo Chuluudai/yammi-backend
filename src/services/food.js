@@ -7,6 +7,7 @@ const {
   insertFood,
   updateFood,
   deleteFood,
+  getFoodsByMaterials,
 } = require("../logic/food");
 
 module.exports = function (app, connection) {
@@ -28,6 +29,16 @@ module.exports = function (app, connection) {
     }
   });
 
+  app.post("/api/foodbymaterials", async (req, res) => {
+    try {
+      logger.info(`${req.ip} /api/foodbymaterials [POST]`);
+
+      getFoodsByMaterials(req, res, connection);
+    } catch (err) {
+      logger.error(`${req.ip} ${err}`);
+      res.status(500).json({ error: err.message });
+    }
+  });
   app.get("/api/food", async (req, res) => {
     try {
       logger.info(`${req.ip} /api/food [GET]`);

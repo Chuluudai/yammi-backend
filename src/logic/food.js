@@ -39,6 +39,35 @@ const getFoods = async (request, response, pool) => {
   }
 };
 
+const getFoodsByMaterials = async (request, response, pool) => {
+  try {
+    const { materials } = request.body;
+
+    const result =
+      await pool.query(`select f.id, f.title, c.name  as category, f.img, f.how_to_cook, f.duration, f.description, AVG(coalesce(cm.rating, 0)) as rating 
+      from food f 
+      left join category c on f.category_id = c.id 
+      left join comment cm on cm.food_id = f.id
+      left join material_food e on e.material_id in(${materials
+        .map((x) => `'${x}'`)
+        .join(",")}) and e.food_id = f.id
+      where e.food_id is not null
+      group by f.id, c."name" 
+      having count(e.food_id) >= ${materials.length > 4 ? 3 : materials.length}
+      order by c.name
+      `);
+
+    return response.status(200).json({
+      data: result.rows,
+      token: request.token,
+    });
+  } catch (error) {
+    response.status(500).send({ error: error.message });
+    logger.error(`${request.ip} ${error.message}`);
+    return;
+  }
+};
+
 const insertFood = async (request, response, pool) => {
   try {
     const { title, img, how_to_cook, duration, category_id } = request.body;
@@ -98,4 +127,5 @@ module.exports = {
   insertFood,
   deleteFood,
   updateFood,
+  getFoodsByMaterials,
 };
