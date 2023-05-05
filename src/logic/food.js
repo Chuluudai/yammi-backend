@@ -18,10 +18,19 @@ const getFoods = async (request, response, pool) => {
       id,
     ]);
 
+    const material = await pool.query(
+      `select m.id, m."name"  from material_food mf 
+      left join material m on mf.material_id = m.id
+      where mf.food_id = $1
+      `,
+      [id]
+    );
+
     return response.status(200).json({
       data: id ? result.rows[0] : result.rows,
       token: request.token,
       steps: step.rows,
+      materials: material.rows,
     });
   } catch (error) {
     response.status(500).send({ error: error.message });
