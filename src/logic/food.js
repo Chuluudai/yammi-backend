@@ -13,9 +13,15 @@ const getFoods = async (request, response, pool) => {
       group by f.id, c."name" 
       order by c.name
       `);
+
+    const step = await pool.query(`select * from step where food_id = $1`, [
+      id,
+    ]);
+
     return response.status(200).json({
       data: id ? result.rows[0] : result.rows,
       token: request.token,
+      steps: step.rows,
     });
   } catch (error) {
     response.status(500).send({ error: error.message });
