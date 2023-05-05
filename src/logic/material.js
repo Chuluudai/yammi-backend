@@ -2,7 +2,16 @@ const { logger } = require("../common/log");
 
 const getMaterial = async (request, response, pool) => {
   try {
-    const result = await pool.query("SELECT * FROM Material");
+    const { material_category_id } = request.query;
+
+    const result = await pool.query(
+      `SELECT * FROM material
+    ${
+      material_category_id
+        ? `where material_category_id='${material_category_id}'`
+        : ""
+    }`
+    );
     return response.status(200).json({
       data: result.rows,
       token: request.token,
