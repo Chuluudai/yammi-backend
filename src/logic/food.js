@@ -2,18 +2,19 @@ const { logger } = require("../common/log");
 
 const getFoods = async (request, response, pool) => {
   try {
-    const { category_id } = request.query;
+    const { category_id, id } = request.query;
 
     const result =
       await pool.query(`select f.id, f.title, c.name  as category, f.img, f.how_to_cook, f.duration, f.description, AVG(coalesce(cm.rating, 0)) as rating from food f 
       left join category c on f.category_id = c.id 
       left join comment cm on cm.food_id = f.id 
       ${category_id ? `where category_id = '${category_id}'` : ""}
+      ${id ? `where f.id = '${id}'` : ""}
       group by f.id, c."name" 
       order by c.name
       `);
     return response.status(200).json({
-      data: result.rows,
+      data: id ? result.rows[0] : result.rows,
       token: request.token,
     });
   } catch (error) {
