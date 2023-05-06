@@ -2,7 +2,11 @@ const { logger } = require("../common/log");
 
 const getComment = async (request, response, pool) => {
   try {
-    const result = await pool.query("SELECT * FROM Comment");
+    const { food_id } = request.query;
+    const result = await pool.query(
+      "SELECT * FROM Comment where food_id = $1",
+      [food_id]
+    );
     return response.status(200).json({
       data: result.rows,
       token: request.token,
@@ -15,10 +19,10 @@ const getComment = async (request, response, pool) => {
 };
 const insertComment = async (request, response, pool) => {
   try {
-    const { user_id, food_id, comment } = request.body;
+    const { user_id, food_id, comment, rating } = request.body;
     await pool.query(
-      "INSERT INTO Comment (user_id, food_id, comment) values ($1, $2, $3)",
-      [user_id, food_id, comment]
+      "INSERT INTO Comment (user_id, food_id, comment) values ($1, $2, $3, $4)",
+      [user_id, food_id, comment, rating]
     );
     return response.status(200).json({
       message: "success",
